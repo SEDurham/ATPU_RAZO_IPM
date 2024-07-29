@@ -275,17 +275,11 @@ for (t in 1:n.occasions){
 
 # Population count data (state-space model)
 # Model for the initial stage-specific population sizes
-
-N1  ~ dnorm(2000,0.01)I(0,)
-N[1,1] <- round(N1)
-N2  ~ dnorm(2000,0.01)I(0,)
-N[2,1] <- round(N2)
-N3  ~ dnorm(2000,0.01)I(0,)
-N[3,1] <- round(N3)
-N4 ~ dnorm(8000,0.01)I(0,)
-N[4,1] <- round(N4) 
-nimm ~ dnorm(100, 0.01)I(0,)       
-Nimm[1] <- round(nimm)
+N[1,1] ~ dpois(870)I(0,)
+N[2,1] ~ dpois(780)I(0,)
+N[3,1] ~ dpois(700)I(0,)
+N[4,1] ~ dpois(6000)I(0,)
+Nimm[1] ~ dpois(50)I(0,)   
 
 # Process model over time: our model of population dynamics
 for (t in 1:(n.occasions-1)){
