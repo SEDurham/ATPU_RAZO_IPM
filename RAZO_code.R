@@ -988,7 +988,57 @@ RAZO_tLTRE_df6 <- RAZO_tLTRE_df6 %>%
   gather(year, value, -type) %>%
   arrange(type)
 
+##########################################################################################################
+##################### Post-hoc linear regression for demographic rate trends #############################
+##########################################################################################################
 
+# Pull out mean demographic rate estimates
+# First-year survival
+RAZO_FYS = MSI_RAZO_IPM_out$mean$alpha[1,]
+
+# Adult survival
+RAZO_AS = MSI_RAZO_IPM_out$mean$alpha[2,]
+
+# Productivity
+RAZO_p = MSI_RAZO_IPM_out$mean$fecund
+
+# Define years
+s_years = 1998:2018
+p_years = 1998:2019
+
+# Create a data frame
+RAZO_FYS_data <- data.frame(Year = s_years, RAZO_FYS = RAZO_FYS)
+RAZO_AS_data <- data.frame(Year = s_years, RAZO_AS = RAZO_AS)
+RAZO_p_data <- data.frame(Year = p_years, RAZO_p = RAZO_p)
+
+# Run linear regression
+RAZO_FYS_model<- lm(RAZO_FYS ~ Year, data = RAZO_FYS_data)
+RAZO_AS_model<- lm(RAZO_AS ~ Year, data = RAZO_AS_data)
+RAZO_p_model<- lm(RAZO_p ~ Year, data = RAZO_p_data)
+
+# View the results
+summary(RAZO_FYS_model)
+summary(RAZO_AS_model)
+summary(RAZO_p_model)
+
+
+# Rerun first year survival without last three estimates
+# Exclude last three estimates
+RAZO_FYS2 = MSI_RAZO_IPM_out$mean$alpha[1,1:18]
+
+# Define years
+s_years2 = 1998:2015
+
+# Create a data frame
+RAZO_FYS_data2 <- data.frame(Year = s_years2, RAZO_FYS2 = RAZO_FYS2)
+
+# Run linear regression
+RAZO_FYS_model2<- lm(RAZO_FYS2 ~ Year, data = RAZO_FYS_data2)
+
+# View the results of new and other models
+summary(RAZO_FYS_model2)
+summary(RAZO_AS_model)
+summary(RAZO_p_model)
 
 
 
