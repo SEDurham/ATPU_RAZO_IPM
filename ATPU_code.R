@@ -1008,7 +1008,56 @@ ATPU_tLTRE_df6 <- ATPU_tLTRE_df6 %>%
   gather(year, value, -type) %>%
   arrange(type)
 
+##########################################################################################################
+##################### Post-hoc linear regression for demographic rate trends #############################
+##########################################################################################################
+
+# Pull out mean demographic rate estimates
+# First-year survival
+ATPU_FYS = MSI_ATPU_ZIGP_out$mean$alpha[1,]
+
+# Adult survival
+ATPU_AS = MSI_ATPU_ZIGP_out$mean$alpha[2,]
+
+# Productivity
+ATPU_p = MSI_ATPU_ZIGP_out$mean$fecund
+
+# Define years
+s_years = 1998:2018
+p_years = 1998:2019
+
+# Create a data frame
+ATPU_FYS_data <- data.frame(Year = s_years, ATPU_FYS = ATPU_FYS)
+ATPU_AS_data <- data.frame(Year = s_years, ATPU_AS = ATPU_AS)
+ATPU_p_data <- data.frame(Year = p_years, ATPU_p = ATPU_p)
+
+# Run linear regression
+ATPU_FYS_model<- lm(ATPU_FYS ~ Year, data = ATPU_FYS_data)
+ATPU_AS_model<- lm(ATPU_AS ~ Year, data = ATPU_AS_data)
+ATPU_p_model<- lm(ATPU_p ~ Year, data = ATPU_p_data)
+
+# View the results
+summary(ATPU_FYS_model)
+summary(ATPU_AS_model)
+summary(ATPU_p_model)
 
 
+# Rerun first year survival without last three estimates
+# Exclude last three estimates
+ATPU_FYS2 = MSI_ATPU_ZIGP_out$mean$alpha[1,1:18]
+
+# Define years
+s_years2 = 1998:2015
+
+# Create a data frame
+ATPU_FYS_data2 <- data.frame(Year = s_years2, ATPU_FYS2 = ATPU_FYS2)
+
+# Run linear regression
+ATPU_FYS_model2<- lm(ATPU_FYS2 ~ Year, data = ATPU_FYS_data2)
+
+# View the results of new and other models
+summary(ATPU_FYS_model2)
+summary(ATPU_AS_model)
+summary(ATPU_p_model)
 
 
